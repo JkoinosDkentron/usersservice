@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.juanda.powerup.users-service' is invalid and this project uses 'com.juanda.powerup.users_service' instead.
+* The original package name 'com.juanda.powerup.usersservice' is invalid and this project uses 'com.juanda.powerup.usersservice' instead.
 
 # Getting Started
 

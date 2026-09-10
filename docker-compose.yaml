@@ -3,7 +3,7 @@ services:
   mysql:
     image: mysql:8.4
     container_name: users-mysql
-    restart: always
+    restart: unless-stopped
 
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -16,7 +16,6 @@ services:
 
     volumes:
       - mysql_data:/var/lib/mysql
-
 
 volumes:
   mysql_data:

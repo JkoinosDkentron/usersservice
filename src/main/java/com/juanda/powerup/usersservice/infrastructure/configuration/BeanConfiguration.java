@@ -1,0 +1,18 @@
+package com.juanda.powerup.usersservice.infrastructure.configuration;
+
+import com.juanda.powerup.usersservice.domain.api.IUserServicePort;
+import com.juanda.powerup.usersservice.domain.spi.IUserPersistencePort;
+import com.juanda.powerup.usersservice.domain.usecase.CreateOwnerUseCase;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class BeanConfiguration {
+
+    @Bean
+    public IUserServicePort userServicePort(
+            IUserPersistencePort userPersistencePort
+    ) {
+        return new CreateOwnerUseCase(userPersistencePort);
+    }
+}
