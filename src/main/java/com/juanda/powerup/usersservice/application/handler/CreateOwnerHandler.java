@@ -4,7 +4,9 @@ import com.juanda.powerup.usersservice.application.dto.request.CreateOwnerReques
 import com.juanda.powerup.usersservice.application.dto.response.CreateOwnerResponse;
 import com.juanda.powerup.usersservice.domain.api.IUserServicePort;
 import com.juanda.powerup.usersservice.domain.model.User;
+import com.juanda.powerup.usersservice.domain.spi.IPasswordEncoderPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -14,6 +16,7 @@ import java.util.UUID;
 public class CreateOwnerHandler implements IUserHandler {
 
     private final IUserServicePort userServicePort;
+    private final IPasswordEncoderPort passwordEncoderPort;
 
     @Override
     public CreateOwnerResponse createOwner(CreateOwnerRequest request) {
@@ -26,7 +29,7 @@ public class CreateOwnerHandler implements IUserHandler {
                 request.phone(),
                 request.birthDate(),
                 request.email(),
-                request.password()
+                passwordEncoderPort.encode(request.password())
         );
 
         User owner = userServicePort.createOwner(user);

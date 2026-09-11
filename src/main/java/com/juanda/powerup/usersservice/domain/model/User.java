@@ -1,9 +1,13 @@
 package com.juanda.powerup.usersservice.domain.model;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.UUID;
 
 public class User {
+
+    private static final int MINIMUM_OWNER_AGE = 18;
 
     private UUID id;
     private String name;
@@ -45,6 +49,9 @@ public class User {
             String email,
             String password
     ) {
+
+        validateAdult(birthDate);
+
         return new User(
                 id,
                 name,
@@ -58,6 +65,21 @@ public class User {
         );
     }
 
+    private static void validateAdult(LocalDate birthDate) {
+
+        int age = Period
+                .between(
+                        birthDate,
+                        LocalDate.now(ZoneId.systemDefault())
+                )
+                .getYears();
+
+        if (age < MINIMUM_OWNER_AGE) {
+            throw new IllegalArgumentException(
+                    "User must be adult"
+            );
+        }
+    }
     public static User restore(
             UUID id,
             String name,
@@ -81,6 +103,7 @@ public class User {
                 role
         );
     }
+
     public UUID getId() {
         return id;
     }
