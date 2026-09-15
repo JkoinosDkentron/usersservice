@@ -1,5 +1,6 @@
 package com.juanda.powerup.usersservice.infrastructure.configuration;
 
+import com.juanda.powerup.usersservice.infrastructure.configuration.exception.SecurityConfigurationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,18 +9,27 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfiguration {
 
+    @SuppressWarnings("java:S4502")
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 
-        return http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-                        .anyRequest().permitAll()
-                )
-                .build();
+        try {
+            return http
+                    .csrf(csrf -> csrf.disable()) // API REST stateless, CSRF no aplica
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers(
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**"
+                            ).permitAll()
+                            .anyRequest().permitAll()
+                    )
+                    .build();
+
+        } catch (Exception exception) {
+            throw new SecurityConfigurationException(
+                    "Error configuring security",
+                    exception
+            );
+        }
     }
 }

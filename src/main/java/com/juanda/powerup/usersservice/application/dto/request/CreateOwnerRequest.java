@@ -21,7 +21,7 @@ public record CreateOwnerRequest(
 
         @NotBlank
         @Pattern(
-                regexp = "^\\+?[0-9]{1,13}$"
+                regexp = "^\\+?\\d{1,13}$"
         )
         String phone,
 

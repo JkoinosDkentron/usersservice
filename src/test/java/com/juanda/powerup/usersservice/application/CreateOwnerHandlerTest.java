@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateOwnerHandlerTest {
+class CreateOwnerHandlerTest {
 
     private static final LocalDate ADULT_BIRTH_DATE =
             LocalDate.now(ZoneId.systemDefault())

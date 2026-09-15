@@ -41,20 +41,22 @@ class UserTest {
 
     @Test
     void shouldNotCreateOwnerWhenUserIsUnderAge() {
-
         assertThrows(
                 IllegalArgumentException.class,
-                () -> User.createOwner(
-                        UUID.randomUUID(),
-                        "Juan",
-                        "Vargas",
-                        "123456",
-                        "+573001234567",
-                        UNDERAGE_BIRTH_DATE,
-                        "juan@test.com",
-                        "encrypted-password"
-                )
+                this::createUnderAgeOwner
         );
+    }
 
+    private void createUnderAgeOwner() {
+        User.createOwner(
+                UUID.randomUUID(),
+                "Juan",
+                "Vargas",
+                "123456",
+                "+573001234567",
+                UNDERAGE_BIRTH_DATE,
+                "juan@test.com",
+                "encrypted-password"
+        );
     }
 }

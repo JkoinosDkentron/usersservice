@@ -6,7 +6,6 @@ import com.juanda.powerup.usersservice.domain.api.IUserServicePort;
 import com.juanda.powerup.usersservice.domain.model.User;
 import com.juanda.powerup.usersservice.domain.spi.IPasswordEncoderPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
