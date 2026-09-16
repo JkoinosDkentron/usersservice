@@ -1,7 +1,5 @@
-package com.juanda.powerup.usersservice.domain;
+package com.juanda.powerup.usersservice.domain.model;
 
-import com.juanda.powerup.usersservice.domain.model.Role;
-import com.juanda.powerup.usersservice.domain.model.User;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
