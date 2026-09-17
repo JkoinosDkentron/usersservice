@@ -1,6 +1,7 @@
 package com.juanda.powerup.usersservice.infrastructure.configuration;
 
 import com.juanda.powerup.usersservice.domain.api.IUserServicePort;
+import com.juanda.powerup.usersservice.domain.spi.IPasswordEncoderPort;
 import com.juanda.powerup.usersservice.domain.spi.IUserPersistencePort;
 import com.juanda.powerup.usersservice.domain.usecase.UserUseCase;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +12,12 @@ public class BeanConfiguration {
 
     @Bean
     public IUserServicePort userServicePort(
-            IUserPersistencePort userPersistencePort
+            IUserPersistencePort userPersistencePort,
+            IPasswordEncoderPort passwordEncoderPort
     ) {
-        return new UserUseCase(userPersistencePort);
+        return new UserUseCase(
+                userPersistencePort,
+                passwordEncoderPort
+        );
     }
 }

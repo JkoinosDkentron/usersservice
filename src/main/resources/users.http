@@ -1,0 +1,160 @@
+@usersUrl = http://localhost:8081
+
+
+### =====================================================
+### HU1 - Crear propietario correctamente
+### Esperado: 201 CREATED
+### Cubre:
+### - campos obligatorios
+### - password encriptada
+### - rol OWNER
+### - mayor de edad
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "birthDate": "1998-05-20",
+  "email": "juan.owner@test.com",
+  "password": "123456"
+}
+
+
+### Guardar manualmente el id retornado
+@ownerId = PEGAR_UUID_AQUI
+
+
+### =====================================================
+### HU1 - Validar que usuario tiene rol OWNER
+### Esperado:
+### {
+###    "owner": true
+### }
+### =====================================================
+
+GET {{usersUrl}}/users/{{ownerId}}/owner
+
+
+
+### =====================================================
+### HU1 - Nombre vacío
+### Esperado: 400 BAD REQUEST
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "birthDate": "1998-05-20",
+  "email": "juan@test.com",
+  "password": "123456"
+}
+
+
+
+### =====================================================
+### HU1 - Documento con letras
+### Esperado: 400 BAD REQUEST
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "ABC123",
+  "phone": "+573001234567",
+  "birthDate": "1998-05-20",
+  "email": "juan@test.com",
+  "password": "123456"
+}
+
+
+
+### =====================================================
+### HU1 - Teléfono supera 13 caracteres
+### Esperado: 400 BAD REQUEST
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567890",
+  "birthDate": "1998-05-20",
+  "email": "juan@test.com",
+  "password": "123456"
+}
+
+
+
+### =====================================================
+### HU1 - Teléfono sin formato permitido
+### Esperado: 400 BAD REQUEST
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "ABC123",
+  "birthDate": "1998-05-20",
+  "email": "juan@test.com",
+  "password": "123456"
+}
+
+
+
+### =====================================================
+### HU1 - Email inválido
+### Esperado: 400 BAD REQUEST
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "birthDate": "1998-05-20",
+  "email": "juan@test",
+  "password": "123456"
+}
+
+
+
+### =====================================================
+### HU1 - Menor de edad
+### Esperado: error de dominio
+### =====================================================
+
+POST {{usersUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "Pedro",
+  "lastName": "Perez",
+  "document": "111111111",
+  "phone": "+573001111111",
+  "birthDate": "2010-01-01",
+  "email": "pedro@test.com",
+  "password": "123456"
+}

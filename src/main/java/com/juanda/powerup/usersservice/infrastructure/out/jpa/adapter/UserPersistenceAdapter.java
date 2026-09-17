@@ -8,6 +8,9 @@ import com.juanda.powerup.usersservice.infrastructure.out.jpa.repository.UserJpa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements IUserPersistencePort {
@@ -23,5 +26,11 @@ public class UserPersistenceAdapter implements IUserPersistencePort {
         UserEntity saved = userJpaRepository.save(entity);
 
         return userEntityMapper.toDomain(saved);
+    }
+
+    @Override
+    public Optional<User> findById(UUID userId) {
+        return userJpaRepository.findById(userId)
+                .map(userEntityMapper::toDomain);
     }
 }
