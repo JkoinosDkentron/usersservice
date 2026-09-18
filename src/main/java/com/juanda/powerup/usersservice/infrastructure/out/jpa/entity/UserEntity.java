@@ -17,23 +17,40 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserEntity {
 
+
     @Id
     private UUID id;
 
+
+    @Column(nullable = false)
     private String name;
 
+
+    @Column(nullable = false)
     private String lastName;
 
+
+    @Column(nullable = false, unique = true)
     private String document;
 
+
+    @Column(nullable = false)
     private String phone;
 
+
+    @Column(nullable = false)
     private LocalDate birthDate;
 
+
+    @Column(nullable = false, unique = true)
     private String email;
 
+
+    @Column(nullable = false)
     private String password;
 
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private RoleEntity role;
 }

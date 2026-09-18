@@ -1,17 +1,13 @@
-@usersUrl = http://localhost:8081
+### Variables
+@baseUrl = http://localhost:8081/api/v1/users
 
 
-### =====================================================
-### HU1 - Crear propietario correctamente
-### Esperado: 201 CREATED
-### Cubre:
-### - campos obligatorios
-### - password encriptada
-### - rol OWNER
-### - mayor de edad
-### =====================================================
+##################################################
+# CREATE OWNER - SUCCESS
+##################################################
 
-POST {{usersUrl}}/users
+### Should create owner successfully
+POST {{baseUrl}}/owners
 Content-Type: application/json
 
 {
@@ -19,34 +15,18 @@ Content-Type: application/json
   "lastName": "Vargas",
   "document": "123456789",
   "phone": "+573001234567",
-  "birthDate": "1998-05-20",
-  "email": "juan.owner@test.com",
-  "password": "123456"
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
 }
 
 
-### Guardar manualmente el id retornado
-@ownerId = PEGAR_UUID_AQUI
+##################################################
+# CREATE OWNER - REQUIRED FIELD VALIDATIONS
+##################################################
 
-
-### =====================================================
-### HU1 - Validar que usuario tiene rol OWNER
-### Esperado:
-### {
-###    "owner": true
-### }
-### =====================================================
-
-GET {{usersUrl}}/users/{{ownerId}}/owner
-
-
-
-### =====================================================
-### HU1 - Nombre vacío
-### Esperado: 400 BAD REQUEST
-### =====================================================
-
-POST {{usersUrl}}/users
+### Should fail when name is empty
+POST {{baseUrl}}/owners
 Content-Type: application/json
 
 {
@@ -54,19 +34,108 @@ Content-Type: application/json
   "lastName": "Vargas",
   "document": "123456789",
   "phone": "+573001234567",
-  "birthDate": "1998-05-20",
-  "email": "juan@test.com",
-  "password": "123456"
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
+}
+
+
+### Should fail when last name is empty
+POST {{baseUrl}}/owners
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
+}
+
+
+### Should fail when document is empty
+POST {{baseUrl}}/owners
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "",
+  "phone": "+573001234567",
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
+}
+
+
+### Should fail when phone is empty
+POST {{baseUrl}}/owners
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "",
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
+}
+
+
+### Should fail when birth date is missing
+POST {{baseUrl}}/owners
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
+}
+
+
+### Should fail when email is empty
+POST {{baseUrl}}/owners
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "birthDate": "1995-01-01",
+  "email": "",
+  "password": "Password123"
+}
+
+
+### Should fail when password is empty
+POST {{baseUrl}}/owners
+Content-Type: application/json
+
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": ""
 }
 
 
 
-### =====================================================
-### HU1 - Documento con letras
-### Esperado: 400 BAD REQUEST
-### =====================================================
+##################################################
+# DOMAIN INVARIANTS
+##################################################
 
-POST {{usersUrl}}/users
+### Should fail when document contains letters
+POST {{baseUrl}}/owners
 Content-Type: application/json
 
 {
@@ -74,39 +143,14 @@ Content-Type: application/json
   "lastName": "Vargas",
   "document": "ABC123",
   "phone": "+573001234567",
-  "birthDate": "1998-05-20",
-  "email": "juan@test.com",
-  "password": "123456"
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
 }
 
 
-
-### =====================================================
-### HU1 - Teléfono supera 13 caracteres
-### Esperado: 400 BAD REQUEST
-### =====================================================
-
-POST {{usersUrl}}/users
-Content-Type: application/json
-
-{
-  "name": "Juan",
-  "lastName": "Vargas",
-  "document": "123456789",
-  "phone": "+573001234567890",
-  "birthDate": "1998-05-20",
-  "email": "juan@test.com",
-  "password": "123456"
-}
-
-
-
-### =====================================================
-### HU1 - Teléfono sin formato permitido
-### Esperado: 400 BAD REQUEST
-### =====================================================
-
-POST {{usersUrl}}/users
+### Should fail when phone format is invalid
+POST {{baseUrl}}/owners
 Content-Type: application/json
 
 {
@@ -114,19 +158,29 @@ Content-Type: application/json
   "lastName": "Vargas",
   "document": "123456789",
   "phone": "ABC123",
-  "birthDate": "1998-05-20",
-  "email": "juan@test.com",
-  "password": "123456"
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
 }
 
 
+### Should fail when phone exceeds maximum length
+POST {{baseUrl}}/owners
+Content-Type: application/json
 
-### =====================================================
-### HU1 - Email inválido
-### Esperado: 400 BAD REQUEST
-### =====================================================
+{
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+57300123456789",
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
+}
 
-POST {{usersUrl}}/users
+
+### Should fail when email format is invalid
+POST {{baseUrl}}/owners
 Content-Type: application/json
 
 {
@@ -134,27 +188,22 @@ Content-Type: application/json
   "lastName": "Vargas",
   "document": "123456789",
   "phone": "+573001234567",
-  "birthDate": "1998-05-20",
-  "email": "juan@test",
-  "password": "123456"
+  "birthDate": "1995-01-01",
+  "email": "juan.vargas",
+  "password": "Password123"
 }
 
 
-
-### =====================================================
-### HU1 - Menor de edad
-### Esperado: error de dominio
-### =====================================================
-
-POST {{usersUrl}}/users
+### Should fail when user is under age
+POST {{baseUrl}}/owners
 Content-Type: application/json
 
 {
-  "name": "Pedro",
-  "lastName": "Perez",
-  "document": "111111111",
-  "phone": "+573001111111",
+  "name": "Juan",
+  "lastName": "Vargas",
+  "document": "123456789",
+  "phone": "+573001234567",
   "birthDate": "2010-01-01",
-  "email": "pedro@test.com",
-  "password": "123456"
+  "email": "juan.vargas@test.com",
+  "password": "Password123"
 }

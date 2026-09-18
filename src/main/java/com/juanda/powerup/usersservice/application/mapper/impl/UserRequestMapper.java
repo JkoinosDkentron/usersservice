@@ -2,7 +2,7 @@ package com.juanda.powerup.usersservice.application.mapper.impl;
 
 import com.juanda.powerup.usersservice.application.dto.request.CreateOwnerRequest;
 import com.juanda.powerup.usersservice.application.mapper.IUserRequestMapper;
-import com.juanda.powerup.usersservice.domain.model.User;
+import com.juanda.powerup.usersservice.domain.model.CreateOwnerData;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -12,11 +12,11 @@ public class UserRequestMapper implements IUserRequestMapper {
 
 
     @Override
-    public User toDomain(
+    public CreateOwnerData toData(
             CreateOwnerRequest request
     ) {
 
-        return User.createOwner(
+        return new CreateOwnerData(
                 UUID.randomUUID(),
                 request.name(),
                 request.lastName(),

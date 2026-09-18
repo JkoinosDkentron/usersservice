@@ -2,15 +2,14 @@ package com.juanda.powerup.usersservice.application.handler.impl;
 
 import com.juanda.powerup.usersservice.application.dto.request.CreateOwnerRequest;
 import com.juanda.powerup.usersservice.application.dto.response.CreateOwnerResponse;
-import com.juanda.powerup.usersservice.application.dto.response.OwnerValidationResponse;
 import com.juanda.powerup.usersservice.application.handler.IUserHandler;
 import com.juanda.powerup.usersservice.application.mapper.IUserRequestMapper;
 import com.juanda.powerup.usersservice.application.mapper.IUserResponseMapper;
 import com.juanda.powerup.usersservice.domain.api.IUserServicePort;
+import com.juanda.powerup.usersservice.domain.model.CreateOwnerData;
 import com.juanda.powerup.usersservice.domain.model.User;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 @Service
 public class UserHandler implements IUserHandler {
@@ -37,22 +36,14 @@ public class UserHandler implements IUserHandler {
             CreateOwnerRequest request
     ) {
 
-        User user =
-                userRequestMapper.toDomain(request);
+        CreateOwnerData data =
+                userRequestMapper.toData(request);
 
 
         User createdUser =
-                userServicePort.createOwner(user);
+                userServicePort.createOwner(data);
 
 
         return userResponseMapper.toResponse(createdUser);
-    }
-
-    @Override
-    public OwnerValidationResponse isOwner(UUID userId) {
-
-        boolean owner = userServicePort.isOwner(userId);
-
-        return new OwnerValidationResponse(owner);
     }
 }

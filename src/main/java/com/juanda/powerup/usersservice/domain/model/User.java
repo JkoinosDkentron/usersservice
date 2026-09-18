@@ -1,140 +1,117 @@
 package com.juanda.powerup.usersservice.domain.model;
 
+import com.juanda.powerup.usersservice.domain.exception.InvalidUserException;
+import com.juanda.powerup.usersservice.domain.model.valueobject.Document;
+import com.juanda.powerup.usersservice.domain.model.valueobject.Email;
+import com.juanda.powerup.usersservice.domain.model.valueobject.Phone;
+import com.juanda.powerup.usersservice.domain.model.valueobject.UserId;
+
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
-import java.util.UUID;
+
+import static com.juanda.powerup.usersservice.domain.message.UserValidationMessage.USER_DATA_NOT_NULL;
+import static com.juanda.powerup.usersservice.domain.message.UserValidationMessage.USER_ID_NOT_NULL;
+
 
 public class User {
 
-    private static final int MINIMUM_OWNER_AGE = 18;
 
-    private UUID id;
+    private UserId id;
+
     private String name;
+
     private String lastName;
-    private String document;
-    private String phone;
+
+    private Document document;
+
+    private Phone phone;
+
     private LocalDate birthDate;
-    private String email;
+
+    private Email email;
+
     private String password;
+
     private Role role;
 
-    private User(UUID uuid,
-                 String name,
-                 String lastName,
-                 String document,
-                 String phone,
-                 LocalDate birthDate,
-                 String email,
-                 String password,
-                 Role role) {
-        this.id = uuid;
-        this.name = name;
-        this.lastName = lastName;
-        this.document = document;
-        this.phone = phone;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
-    public static User createOwner(
-            UUID id,
-            String name,
-            String lastName,
-            String document,
-            String phone,
-            LocalDate birthDate,
-            String email,
-            String password
-    ) {
+    public User(UserData data) {
 
-        validateAdult(birthDate);
 
-        return new User(
-                id,
-                name,
-                lastName,
-                document,
-                phone,
-                birthDate,
-                email,
-                password,
-                Role.OWNER
-        );
-    }
+        if (data == null) {
 
-    private static void validateAdult(LocalDate birthDate) {
-
-        int age = Period
-                .between(
-                        birthDate,
-                        LocalDate.now(ZoneId.systemDefault())
-                )
-                .getYears();
-
-        if (age < MINIMUM_OWNER_AGE) {
-            throw new IllegalArgumentException(
-                    "User must be adult"
+            throw new InvalidUserException(
+                    USER_DATA_NOT_NULL
             );
         }
-    }
-    public static User restore(
-            UUID id,
-            String name,
-            String lastName,
-            String document,
-            String phone,
-            LocalDate birthDate,
-            String email,
-            String password,
-            Role role
-    ) {
-        return new User(
-                id,
-                name,
-                lastName,
-                document,
-                phone,
-                birthDate,
-                email,
-                password,
-                role
-        );
+
+
+        if (data.id() == null) {
+
+            throw new InvalidUserException(
+                    USER_ID_NOT_NULL
+            );
+        }
+
+
+        this.id = data.id();
+
+        this.name = data.name();
+
+        this.lastName = data.lastName();
+
+        this.document = data.document();
+
+        this.phone = data.phone();
+
+        this.birthDate = data.birthDate();
+
+        this.email = data.email();
+
+        this.password = data.password();
+
+        this.role = data.role();
     }
 
-    public UUID getId() {
+
+    public UserId getId() {
         return id;
     }
+
 
     public String getName() {
         return name;
     }
 
+
     public String getLastName() {
         return lastName;
     }
 
-    public String getDocument() {
+
+    public Document getDocument() {
         return document;
     }
 
-    public String getPhone() {
+
+    public Phone getPhone() {
         return phone;
     }
+
 
     public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public String getEmail() {
+
+    public Email getEmail() {
         return email;
     }
+
 
     public String getPassword() {
         return password;
     }
+
 
     public Role getRole() {
         return role;

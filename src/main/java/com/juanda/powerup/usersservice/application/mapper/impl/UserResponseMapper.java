@@ -16,7 +16,7 @@ public class UserResponseMapper implements IUserResponseMapper {
     ) {
 
         return new CreateOwnerResponse(
-                user.getId()
+                user.getId().value()
         );
     }
 }
